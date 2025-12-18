@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
   console.log(`\n\nWebhook received ${timestamp}\n`);
-  console.log(JSON.stringify(req.body, null, 2));
+  //console.log(JSON.stringify(req.body, null, 2));
+  console.log(JSON.stringify(req));
 
   const payload = JSON.stringify(req.body);
   const signature = req.headers["x-hub-signature-256"];
@@ -42,8 +43,8 @@ app.post('/', (req, res) => {
       .update(payload)
       .digest("hex");
 
-  console.log("signature: " + signature);
-  console.log("expectedSignature: " + expectedSignature);
+  //console.log("signature: " + signature);
+  //console.log("expectedSignature: " + expectedSignature);
 
   if (signature === expectedSignature) {
     console.log("Firma válida ✔️");
