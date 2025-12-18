@@ -42,12 +42,15 @@ app.post('/', (req, res) => {
       .update(payload)
       .digest("hex");
 
+  console.log("signature: " + signature);
+  console.log("expectedSignature: " + expectedSignature);
+
   if (signature === expectedSignature) {
     console.log("Firma válida ✔️");
   } else {
     console.log("Firma NO válida ❌");
   }
-  
+
   res.status(200).end();
 });
 
