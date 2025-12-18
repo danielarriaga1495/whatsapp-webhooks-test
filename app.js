@@ -1,6 +1,9 @@
 // Import Express.js
 const express = require('express');
 
+// Import crypto
+const crypto = require("crypto");
+
 // Create an Express app
 const app = express();
 
@@ -28,6 +31,23 @@ app.post('/', (req, res) => {
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
+
+  const payload = JSON.stringify(req.body);
+  const signature = req.headers["x-hub-signature-256"];
+
+  const expectedSignature =
+    "sha256=" +
+    crypto
+      .createHmac("sha256", process.env.APP_SECRET)
+      .update(payload)
+      .digest("hex");
+
+  if (signature === expectedSignature) {
+    console.log("Firma válida ✔️");
+  } else {
+    console.log("Firma NO válida ❌");
+  }
+  
   res.status(200).end();
 });
 
